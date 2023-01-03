@@ -48,6 +48,22 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     changelist_actions = ('generate_configs',)
 
+    fieldsets = (
+        ('Общее', {
+            'classes': ('wide', 'extrapretty'),
+            'fields': ('is_active', 'name', 'download_interface_file',)
+        }),
+        ('Сервер', {
+            'classes': ('wide', 'extrapretty'),
+            'fields': (
+                ('ip_address', 'ip_address_node'), ('server', 'listen_port'),)
+        }),
+        ('Ключи', {
+            'classes': ('collapse',),
+            'fields': ('public_key', 'private_key')
+        }),
+    )
+
     @staticmethod
     @admin.display(description='IP адрес с узлом')
     def ip_address_with_node(obj) -> str:
@@ -92,7 +108,7 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
         if not obj:
             return self.readonly_fields
         if obj.public_key and obj.private_key:
-            return 'public_key', 'private_key'
+            return 'public_key', 'private_key', 'download_interface_file'
         return self.readonly_fields
 
     def save_model(self, request, obj, form, change):
@@ -111,9 +127,28 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_display = (
         'id', 'get_ip_address_with_node', 'get_dns_addresses', 'config_owner',
         'get_wireguard_interfaces', 'download_config_file', 'is_active',)
-
     list_filter = ('is_active', 'wireguard_interfaces')
     changelist_actions = ('generate_configs',)
+
+    fieldsets = (
+        ('Общее', {
+            'classes': ('wide', 'extrapretty'),
+            'fields': ('is_active', 'config_owner', 'download_config_file',)
+        }),
+        ('Сервер', {
+            'classes': ('wide', 'extrapretty'),
+            'fields': (
+                ('ip_address', 'ip_address_node'),)
+        }),
+        ('Привязки', {
+            'classes': ('wide', 'extrapretty'),
+            'fields': ('wireguard_interfaces', 'dns_addresses', 'allowed_ips',)
+        }),
+        ('Ключи', {
+            'classes': ('collapse',),
+            'fields': ('public_key', 'private_key')
+        }),
+    )
 
     @staticmethod
     @admin.display(description='IP адрес с узлом')
@@ -163,7 +198,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
         if not obj:
             return self.readonly_fields
         if obj.public_key and obj.private_key:
-            return 'public_key', 'private_key'
+            return 'public_key', 'private_key', 'download_config_file'
         return self.readonly_fields
 
     def save_model(self, request, obj, form, change):
