@@ -1,16 +1,15 @@
 from django.contrib import admin
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db.models import QuerySet
 from django.utils.html import format_html
 from django_object_actions import DjangoObjectActions, action
 
-from services.utils.config_genetrator import generate_peer_config_with_data, \
-    generate_interface_config_with_data
-
+from services.utils.config_genetrator import (
+    generate_interface_config_with_data, generate_peer_config_with_data)
 from services.utils.keygen_generator import keygen
 from wireguard.models import (AllowedIp, Dns, GeneralSettings,
                               WireguardInterface, WireguardPeer)
-from django.db.models import QuerySet
 
 
 @admin.register(GeneralSettings)
@@ -72,6 +71,7 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
             return format_html(
                 '<a href="{url}" download>Скачать</a>', url=obj.config_file.url
             )
+        return '-'
 
     @action(label='Сгенерировать файлы')
     def generate_configs(self, request, queryset: QuerySet):
@@ -92,8 +92,7 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
         if not obj:
             return self.readonly_fields
         if obj.public_key and obj.private_key:
-            readonly_fields = ('public_key', 'private_key')
-            return readonly_fields
+            return 'public_key', 'private_key'
         return self.readonly_fields
 
     def save_model(self, request, obj, form, change):
@@ -146,6 +145,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
             return format_html(
                 '<a href="{url}" download>Скачать</a>', url=obj.config_file.url
             )
+        return '-'
 
     @action(label='Сгенерировать файлы')
     def generate_configs(self, request, queryset: QuerySet):
@@ -163,8 +163,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
         if not obj:
             return self.readonly_fields
         if obj.public_key and obj.private_key:
-            readonly_fields = ('public_key', 'private_key')
-            return readonly_fields
+            return 'public_key', 'private_key'
         return self.readonly_fields
 
     def save_model(self, request, obj, form, change):

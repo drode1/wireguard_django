@@ -20,11 +20,13 @@ def get_first_wg_interface() -> object | None:
 
 
 def get_empty_peer_ip_address() -> str:
+    """ Функция проверяет, является ли новый IP дубликатом старого или нет. """
+
+    from services.utils.ip_generator import generate_random_ip
     from wireguard.models import WireguardPeer
 
     last_peer_address = str(WireguardPeer.objects.last().ip_address)
-    from services.utils.ip_generator import generate_random_ip
     new_ip_address = str(generate_random_ip())
     if last_peer_address == new_ip_address:
-        new_ip_address = generate_random_ip()
+        new_ip_address = str(generate_random_ip())
     return new_ip_address

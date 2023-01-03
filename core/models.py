@@ -14,7 +14,7 @@ class BaseModel(models.Model):
 
 class WireguardBaseModel(BaseModel):
     """
-    Модель используемая для интерфейсов и пиров (конфигов пользователей). 
+    Модель используемая для интерфейсов и пиров (конфигов пользователей).
     """
 
     private_key = models.CharField('Приватный ключ', max_length=64, blank=True)

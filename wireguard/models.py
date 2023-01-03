@@ -23,7 +23,8 @@ class GeneralSettings(BaseModel):
                                        'использовать доменное имя, в качестве '
                                        'адреса подключения.')
                                    )
-    network_interface = models.CharField('Сетевой интерфейс', max_length=16, blank=True, null=True, default='ens3')
+    network_interface = models.CharField('Сетевой интерфейс', max_length=16,
+                                         blank=True, null=True, default='ens3')
 
     class Meta:
         verbose_name = 'Настройка'

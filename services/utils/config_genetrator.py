@@ -6,10 +6,9 @@ def generate_interface_peer_config_structure(public_key: str,
     Используется для дополнения wg конфигов пирами.
     """
 
-    config = (f'\n[Peer]\n'
-              f'PublicKey = {public_key}\n'
-              f'AllowedIPs = {ip_address}/{ip_address_node}\n')
-    return config
+    return (f'\n[Peer]\n'
+            f'PublicKey = {public_key}\n'
+            f'AllowedIPs = {ip_address}/{ip_address_node}\n')
 
 
 def generate_interface_config_structure(private_key: str, address: str,
@@ -20,13 +19,14 @@ def generate_interface_config_structure(private_key: str, address: str,
     Используется для создания wg конфигов.
     """
 
-    config = (f'[Interface]\n'
-              f'PrivateKey = {private_key}\n'
-              f'Address = {address}\n'
-              f'ListenPort = {listen_port}\n'
-              f'PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o {network_interface} -j MASQUERADE\n'
-              f'PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o {network_interface} -j MASQUERADE\n')
-    return config
+    return (f'[Interface]\n'
+            f'PrivateKey = {private_key}\n'
+            f'Address = {address}\n'
+            f'ListenPort = {listen_port}\n'
+            f'PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t '
+            f'nat -A POSTROUTING -o {network_interface} -j MASQUERADE\n'
+            f'PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t '
+            f'nat -D POSTROUTING -o {network_interface} -j MASQUERADE\n')
 
 
 def generate_interface_config_with_data(obj, peers_data) -> str:
@@ -62,16 +62,15 @@ def generate_peer_config_structure(private_key: str, address: str,
     Используется для создания peer конфигов.
     """
 
-    config = (f'[Interface]\n'
-              f'PrivateKey = {private_key}\n'
-              f'Address = {address}\n'
-              f'DNS = {dns_list}\n'
-              f'[Peer]\n'
-              f'PublicKey = {server_public_key}\n'
-              f'Endpoint = {endpoint}\n'
-              f'AllowedIPs = {allowed_ips}\n'
-              f'PersistentKeepalive = {persistent_keep_alive}')
-    return config
+    return (f'[Interface]\n'
+            f'PrivateKey = {private_key}\n'
+            f'Address = {address}\n'
+            f'DNS = {dns_list}\n'
+            f'[Peer]\n'
+            f'PublicKey = {server_public_key}\n'
+            f'Endpoint = {endpoint}\n'
+            f'AllowedIPs = {allowed_ips}\n'
+            f'PersistentKeepalive = {persistent_keep_alive}')
 
 
 def generate_peer_config_with_data(obj) -> str:
@@ -91,8 +90,7 @@ def generate_peer_config_with_data(obj) -> str:
         map(str, [ip.__str__() for ip in obj.allowed_ips.all()]))
     persistent_keep_alive = obj.persistent_keep_alive
 
-    config = generate_peer_config_structure(private_key, address, dns,
-                                            server_public_key,
-                                            endpoint, allowed_ips,
-                                            persistent_keep_alive)
-    return config
+    return generate_peer_config_structure(private_key, address, dns,
+                                          server_public_key,
+                                          endpoint, allowed_ips,
+                                          persistent_keep_alive)
