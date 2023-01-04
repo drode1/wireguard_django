@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.validators import (FileExtensionValidator,
                                     validate_ipv4_address)
 from django.db import models
@@ -10,12 +11,12 @@ class GeneralSettings(BaseModel):
     """ Модель для хранения базовых настроек.  """
 
     endpoint = models.CharField('IP адрес',
-                                max_length=25,
+                                max_length=settings.IP_ADDRESS_LENGTH,
                                 default='194.68.32.97',
                                 validators=[validate_ipv4_address]
                                 )
     domain_name = models.CharField('Доменное имя',
-                                   max_length=255,
+                                   max_length=settings.DOMAIN_NAME_LENGTH,
                                    blank=True,
                                    null=True,
                                    help_text=(
@@ -23,8 +24,11 @@ class GeneralSettings(BaseModel):
                                        'использовать доменное имя, в качестве '
                                        'адреса подключения.')
                                    )
-    network_interface = models.CharField('Сетевой интерфейс', max_length=16,
-                                         blank=True, null=True, default='ens3')
+    network_interface = models.CharField(
+        'Сетевой интерфейс',
+        max_length=settings.NETWORK_INTERFACE_LENGTH,
+        blank=True, null=True, default='ens3'
+    )
 
     class Meta:
         verbose_name = 'Настройка'
@@ -67,7 +71,8 @@ class Dns(BaseModel):
     WG Interface
     """
 
-    name = models.CharField('Название ресурса', max_length=128, blank=True,
+    name = models.CharField('Название ресурса',
+                            max_length=settings.NAME_LENGTH, blank=True,
                             null=True, unique=True)
 
     dns_address = models.GenericIPAddressField('DNS адрес', blank=False,
@@ -88,13 +93,19 @@ class Dns(BaseModel):
 class WireguardInterface(WireguardBaseModel):
     """ Модель для создания wireguard интерфейсов. """
 
-    name = models.CharField('Название интерфейса', max_length=100, unique=True,
+    name = models.CharField('Название интерфейса',
+                            max_length=settings.NAME_LENGTH, unique=True,
                             default='wg0')
 
-    listen_port = models.PositiveIntegerField('Порт', default='51820')
-    ip_address = models.GenericIPAddressField('Адрес', max_length=25,
-                                              default='10.0.0.0', unique=True)
-    ip_address_node = models.PositiveSmallIntegerField('IP узел', default=24)
+    listen_port = models.PositiveIntegerField('Порт',
+                                              default=settings.LISTEN_PORT)
+    ip_address = models.GenericIPAddressField(
+        'Адрес', max_length=settings.IP_ADDRESS_LENGTH, default='10.0.0.0',
+        unique=True
+    )
+    ip_address_node = models.PositiveSmallIntegerField(
+        'IP узел', default=settings.INTERFACE_NODE_VALUE
+    )
 
     server = models.ForeignKey(GeneralSettings, on_delete=models.SET_NULL,
                                null=True, blank=True, verbose_name='Сервер',
@@ -129,9 +140,13 @@ class WireguardPeer(WireguardBaseModel):
                                      verbose_name='Пользователь',
                                      related_name='peers')
 
-    ip_address = models.GenericIPAddressField('Адрес', max_length=25,
-                                              default='10.0.0.0', unique=True)
-    ip_address_node = models.PositiveSmallIntegerField('IP узел', default=32)
+    ip_address = models.GenericIPAddressField(
+        'Адрес', max_length=settings.IP_ADDRESS_LENGTH, default='10.0.0.0',
+        unique=True
+    )
+    ip_address_node = models.PositiveSmallIntegerField(
+        'IP узел', default=settings.PEER_NODE_VALUE
+    )
     wireguard_interfaces = models.ManyToManyField(WireguardInterface,
                                                   verbose_name='Интерфейсы',
                                                   related_name='interface_set')
@@ -141,7 +156,7 @@ class WireguardPeer(WireguardBaseModel):
     dns_addresses = models.ManyToManyField(Dns, verbose_name='DNS адреса',
                                            related_name='dns_set')
     persistent_keep_alive = models.PositiveSmallIntegerField(
-        'Время жизни подключения', default=20
+        'Время жизни подключения', default=settings.PERSISTENT_KEEP_ALIVE
     )
     config_file = models.FileField('Конфиг файл',
                                    upload_to='configs/',

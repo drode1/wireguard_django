@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -17,8 +18,14 @@ class WireguardBaseModel(BaseModel):
     Модель используемая для интерфейсов и пиров (конфигов пользователей).
     """
 
-    private_key = models.CharField('Приватный ключ', max_length=64, blank=True)
-    public_key = models.CharField('Публичный ключ', max_length=64, blank=True)
+    private_key = models.CharField('Приватный ключ',
+                                   max_length=settings.KEY_MAX_LENGTH,
+                                   blank=True,
+                                   unique=True)
+    public_key = models.CharField('Публичный ключ',
+                                  max_length=settings.KEY_MAX_LENGTH,
+                                  blank=True,
+                                  unique=True)
 
     class Meta:
         abstract = True
