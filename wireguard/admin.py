@@ -136,6 +136,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_per_page = settings.PEERS_PER_PAGE
     list_editable = ('config_owner',)
     changelist_actions = ('generate_config_files', 'generate_new_configs')
+    save_on_top = True
 
     fieldsets = (
         ('Общее', {

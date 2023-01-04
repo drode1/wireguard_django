@@ -8,6 +8,10 @@ from wireguard.models import WireguardPeer
 
 
 class UserPeerAdminInline(admin.TabularInline):
+    """
+    Инлайн модель, используется для отображения пиров в аккаунте пользователя.
+    """
+
     model = WireguardPeer
     can_delete = False
     extra = 0
@@ -34,10 +38,13 @@ class UserPeerAdminInline(admin.TabularInline):
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
+    """ Модель для управления пользователем. """
+
     list_display = ('id', 'username', 'first_name', 'last_name', 'email',
                     'get_quantity_of_linked_configs',)
     list_filter = ('username', 'email',)
     inlines = (UserPeerAdminInline,)
+    save_on_top = True
 
     fieldsets = (
         ('Общее', {
@@ -52,6 +59,11 @@ class UserAdmin(UserAdmin):
             'classes': ('wide', 'extrapretty'),
             'fields': (
                 ('is_staff', 'is_superuser',),)
+        }),
+        ('Группы', {
+            'classes': ('collapse', 'extrapretty'),
+            'fields': (
+                ('groups', 'user_permissions',),)
         }),
         ('Пароль', {
             'classes': ('collapse',),
