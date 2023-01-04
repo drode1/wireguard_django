@@ -94,3 +94,7 @@ def generate_peer_config_with_data(obj) -> str:
                                           server_public_key,
                                           endpoint, allowed_ips,
                                           persistent_keep_alive)
+
+
+if __name__ == '__main__':
+    pass

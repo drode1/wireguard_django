@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -5,6 +6,9 @@ from django.db.models import QuerySet
 from django.utils.html import format_html
 from django_object_actions import DjangoObjectActions, action
 
+from services.models.services import (get_base_allowed_ip,
+                                      get_empty_peer_ip_address,
+                                      get_first_wg_interface)
 from services.utils.config_genetrator import (
     generate_interface_config_with_data, generate_peer_config_with_data)
 from services.utils.keygen_generator import keygen
@@ -46,7 +50,7 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     list_filter = ('is_active',)
 
-    changelist_actions = ('generate_configs',)
+    changelist_actions = ('generate_interface_files',)
 
     fieldsets = (
         ('Общее', {
@@ -90,7 +94,7 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
         return '-'
 
     @action(label='Сгенерировать файлы')
-    def generate_configs(self, request, queryset: QuerySet):
+    def generate_interface_files(self, request, queryset: QuerySet):
         """ По кнопке генерирует файл для каждого из интерфейсов. """
 
         for obj in queryset:
@@ -128,7 +132,8 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
         'id', 'get_ip_address_with_node', 'get_dns_addresses', 'config_owner',
         'get_wireguard_interfaces', 'download_config_file', 'is_active',)
     list_filter = ('is_active', 'wireguard_interfaces')
-    changelist_actions = ('generate_configs',)
+    list_per_page = settings.PEERS_PER_PAGE
+    changelist_actions = ('generate_config_files', 'generate_new_configs')
 
     fieldsets = (
         ('Общее', {
@@ -183,7 +188,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
         return '-'
 
     @action(label='Сгенерировать файлы')
-    def generate_configs(self, request, queryset: QuerySet):
+    def generate_config_files(self, request, queryset: QuerySet):
         """ По кнопке генерирует файл для каждого из конфигов. """
 
         for obj in queryset:
@@ -193,6 +198,23 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
             obj.config_file = default_storage.save(f'configs/{obj.id}.conf',
                                                    ContentFile(config))
             obj.save()
+
+    @action(label='Сгенерировать новые пиры',
+            description=f'Генерирует {settings.NUMBER_OF_CONFIGS} новых пиров')
+    def generate_new_configs(self, request, queryset: QuerySet):
+        """ Метод генерирует новые пиры в админке автоматически. """
+
+        for _ in range(settings.NUMBER_OF_CONFIGS):
+            public_key, private_key = keygen()
+            ip_address = get_empty_peer_ip_address()
+            new_peer = WireguardPeer.objects.create(public_key=public_key,
+                                                    private_key=private_key,
+                                                    ip_address=ip_address,
+                                                    )
+            new_peer.wireguard_interfaces.add(get_first_wg_interface())
+            new_peer.allowed_ips.add(get_base_allowed_ip())
+            for dns in Dns.objects.all():
+                new_peer.dns_addresses.add(dns.id)
 
     def get_readonly_fields(self, request, obj=None):
         if not obj:

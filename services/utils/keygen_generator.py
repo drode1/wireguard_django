@@ -23,3 +23,7 @@ def keygen() -> tuple[str, str]:
             ),
         ).decode(),
     )
+
+
+if __name__ == '__main__':
+    pass
