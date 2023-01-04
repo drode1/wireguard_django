@@ -30,6 +30,7 @@ class AllowedIpAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'ip_address', 'is_active')
     list_filter = ('is_active',)
+    list_editable = ('ip_address',)
 
 
 @admin.register(Dns)
@@ -38,6 +39,7 @@ class DnsAddressesAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'name', 'dns_address', 'is_active')
     list_filter = ('is_active',)
+    list_editable = ('name',)
 
 
 @admin.register(WireguardInterface)
@@ -49,7 +51,6 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
                     'download_interface_file')
 
     list_filter = ('is_active',)
-
     changelist_actions = ('generate_interface_files',)
 
     fieldsets = (
@@ -133,6 +134,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
         'get_wireguard_interfaces', 'download_config_file', 'is_active',)
     list_filter = ('is_active', 'wireguard_interfaces')
     list_per_page = settings.PEERS_PER_PAGE
+    list_editable = ('config_owner',)
     changelist_actions = ('generate_config_files', 'generate_new_configs')
 
     fieldsets = (
