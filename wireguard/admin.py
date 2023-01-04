@@ -56,7 +56,7 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = (
         ('Общее', {
             'classes': ('wide', 'extrapretty'),
-            'fields': ('is_active', 'name', 'download_interface_file',)
+            'fields': ('is_active', 'name',)
         }),
         ('Сервер', {
             'classes': ('wide', 'extrapretty'),
@@ -87,12 +87,11 @@ class WireguardInterfaceAdmin(DjangoObjectActions, admin.ModelAdmin):
     @action(description='Интерфейс')
     def download_interface_file(obj):
         """ Выводит кнопку для скачивания конфига. """
-
         if obj.config_file:
             return format_html(
                 '<a href="{url}" download>Скачать</a>', url=obj.config_file.url
             )
-        return '-'
+        return None
 
     @action(label='Сгенерировать файлы')
     def generate_interface_files(self, request, queryset: QuerySet):
@@ -141,7 +140,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = (
         ('Общее', {
             'classes': ('wide', 'extrapretty'),
-            'fields': ('is_active', 'config_owner', 'download_config_file',)
+            'fields': ('is_active', 'config_owner',)
         }),
         ('Сервер', {
             'classes': ('wide', 'extrapretty'),
@@ -188,7 +187,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
             return format_html(
                 '<a href="{url}" download>Скачать</a>', url=obj.config_file.url
             )
-        return '-'
+        return None
 
     @action(label='Сгенерировать файлы')
     def generate_config_files(self, request, queryset: QuerySet):

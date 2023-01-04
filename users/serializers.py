@@ -5,7 +5,6 @@ from rest_framework.validators import UniqueValidator
 from users.models import User
 
 
-
 class CreateUserSerializer(serializers.ModelSerializer):
     """ Сериализатор используемый для создания пользователей. """
 

@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from users.views import UserViewSet
-from wireguard.views import PeerViewSet, DnsApiView, AllowedIpApiView
+from wireguard.views import AllowedIpApiView, DnsApiView, PeerViewSet
 
 app_name = 'api'
 

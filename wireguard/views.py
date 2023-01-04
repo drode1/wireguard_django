@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 
 from api.mixins import BaseGetApiView
-from wireguard.models import WireguardPeer, Dns, AllowedIp
-from wireguard.serializers import (ReadConfigsSerializer, ReadDnsSerializer,
-                                   ReadAllowedIpSerializer)
+from wireguard.models import AllowedIp, Dns, WireguardPeer
+from wireguard.serializers import (ReadAllowedIpSerializer,
+                                   ReadConfigsSerializer, ReadDnsSerializer)
 
 
 class DnsApiView(BaseGetApiView):

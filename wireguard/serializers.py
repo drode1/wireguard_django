@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from wireguard.models import WireguardPeer, WireguardInterface, AllowedIp, Dns
+
+from wireguard.models import AllowedIp, Dns, WireguardInterface, WireguardPeer
 
 
 class ReadWireguardInterfaceSerializer(serializers.ModelSerializer):
