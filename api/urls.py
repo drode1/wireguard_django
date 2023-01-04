@@ -1,9 +1,16 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from users.views import UserViewSet
+from wireguard.views import PeerViewSet, DnsApiView, AllowedIpApiView
+
 app_name = 'api'
 
 router_v1 = DefaultRouter()
+router_v1.register(r'users', UserViewSet, basename='users')
+router_v1.register(r'peers', PeerViewSet, basename='peers')
+router_v1.register(r'dns', DnsApiView, basename='dns')
+router_v1.register(r'allowed-ips', AllowedIpApiView, basename='allowed-ips')
 
 v1_urlpatterns = (
     [
