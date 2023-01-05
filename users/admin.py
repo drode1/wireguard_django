@@ -53,7 +53,8 @@ class UserAdmin(UserAdmin):
         }),
         ('Данные', {
             'classes': ('wide', 'extrapretty'),
-            'fields': ('first_name', 'last_name', 'username', 'email',)
+            'fields': (
+                'first_name', 'last_name', 'username', 'email', 'telegram_id',)
         }),
         ('Права', {
             'classes': ('wide', 'extrapretty'),
