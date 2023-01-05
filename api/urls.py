@@ -2,7 +2,8 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from users.views import UserViewSet
-from wireguard.views import AllowedIpApiView, DnsApiView, PeerViewSet
+from wireguard.views import (AllowedIpApiView, DnsApiView, GetConfigFile,
+                             PeerViewSet)
 
 app_name = 'api'
 
@@ -15,6 +16,7 @@ router_v1.register(r'allowed-ips', AllowedIpApiView, basename='allowed-ips')
 v1_urlpatterns = (
     [
         path('', include(router_v1.urls)),
+        path('config-file/', GetConfigFile.as_view(), name='config-file')
     ],
     'v1'
 )
