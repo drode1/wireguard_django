@@ -73,7 +73,7 @@ class Dns(BaseModel):
 
     name = models.CharField('Название ресурса',
                             max_length=settings.NAME_LENGTH, blank=True,
-                            null=True, unique=True)
+                            null=True)
 
     dns_address = models.GenericIPAddressField('DNS адрес', blank=False,
                                                null=False, unique=True)
