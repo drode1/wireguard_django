@@ -1,4 +1,5 @@
 from rest_framework import permissions, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,15 +29,6 @@ class PeerViewSet(viewsets.ReadOnlyModelViewSet):
 
     # TODO: Сделать проверку сериализатора на создания конфига
 
-
-class GetConfigFile(APIView):
-    """
-    Метод возвращает пир (конфиг), который не принадлежит
-    ни одному пользователю.
-    """
-
-    permission_classes = (permissions.IsAuthenticated,)
-
     @staticmethod
     def __check_user_peer_exist(user):
         """ Проверяет есть ли уже пиры у пользователя или нет. """
@@ -51,7 +43,13 @@ class GetConfigFile(APIView):
         peer.save()
         return peer
 
-    def get(self, request, *args, **kwargs):
+    @action(detail=False, methods=('GET',), url_path='get-config')
+    def get_config(self, request, *args, **kwargs):
+        """
+        Метод возвращает пир (конфиг), который не принадлежит
+        ни одному пользователю.
+        """
+
         user = request.user
         if self.__check_user_peer_exist(user):
             user_peer = user.peers.order_by('-id')
