@@ -32,6 +32,7 @@ INSTALLED_APPS = [
 
     'django_object_actions',
     'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -114,10 +115,10 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.TokenAuthentication',
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
     # ],
     'PAGE_SIZE': 10,
     'DEFAULT_PAGINATION_CLASS':
@@ -134,6 +135,7 @@ PERSISTENT_KEEP_ALIVE = 20
 INTERFACE_NODE_VALUE = 24
 PEER_NODE_VALUE = 32
 LISTEN_PORT = 51820
+TELEGRAM_ID_LENGTH = 128
 
 # Список переменных админки
 PEERS_PER_PAGE = 200
