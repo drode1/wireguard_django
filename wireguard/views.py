@@ -34,6 +34,7 @@ class GetConfigFile(APIView):
     Метод возвращает пир (конфиг), который не принадлежит
     ни одному пользователю.
     """
+
     permission_classes = (permissions.IsAuthenticated,)
 
     @staticmethod
