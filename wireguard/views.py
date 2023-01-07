@@ -51,16 +51,15 @@ class PeerViewSet(viewsets.ReadOnlyModelViewSet):
 
         user = request.user
         if self.__check_user_peer_exist(user):
-            user_peer = user.peers.order_by('-id')
-            data = []
-            for peer in user_peer:
-                data.append({
-                    'id': peer.id,
-                    'config_file': peer.config_file
-                })
-            content = {'error': 'У вас уже есть конфиг файл',
-                       'data': data
-                       }
+            user_peer = user.peers.order_by('id').first()
+
+            content = {
+                'error': 'У вас уже есть конфиг файл',
+                'data': {
+                    'id': user_peer.id,
+                    'config': user_peer.config_file
+                }
+            }
             return Response(content, status=status.HTTP_403_FORBIDDEN)
         peer_without_owner = (
             WireguardPeer.objects.filter(config_owner__isnull=True)
