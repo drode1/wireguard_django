@@ -4,10 +4,9 @@ from django.db import models
 
 
 class User(AbstractUser):
-    email = models.EmailField('Почта', blank=True, unique=True)
-    telegram_id = models.CharField('Telegram ID',
-                                   max_length=settings.TELEGRAM_ID_LENGTH,
-                                   unique=True, null=True, blank=True)
+    email = models.EmailField('Почта', blank=True, null=True, unique=True)
+    telegram_id = models.PositiveBigIntegerField('Telegram ID', unique=True,
+                                                 null=True, blank=True)
 
     class Meta:
         verbose_name = 'Пользователь'
