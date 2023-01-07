@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from users.views import UserViewSet
+from users.views import AuthTelegramUser, UserViewSet
 from wireguard.views import AllowedIpApiView, DnsApiView, PeerViewSet
 
 app_name = 'api'
@@ -20,6 +20,15 @@ v1_urlpatterns = (
     'v1'
 )
 
+auth_patterns = (
+    [
+        path('auth/telegram/', AuthTelegramUser.as_view(),
+             name='telegram-auth'),
+    ],
+    'auth'
+)
+
 urlpatterns = [
     path('v1/', include(v1_urlpatterns)),
+    path('v1/', include(auth_patterns)),
 ]
