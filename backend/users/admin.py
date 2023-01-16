@@ -3,8 +3,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from django_object_actions import action
 
-from users.models import User
-from wireguard.models import WireguardPeer
+from backend.users.models import User
+from backend.wireguard.models import WireguardPeer
 
 
 class UserPeerAdminInline(admin.TabularInline):

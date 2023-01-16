@@ -5,9 +5,9 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 
-from users.models import User
-from users.serializers import (CreateUserSerializer, UserSerializer,
-                               UserTelegramSerializer)
+from backend.users.models import User
+from backend.users.serializers import (CreateUserSerializer, UserSerializer,
+                                       UserTelegramSerializer)
 
 
 class UserViewSet(viewsets.ModelViewSet):

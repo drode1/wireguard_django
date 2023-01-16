@@ -2,7 +2,7 @@ from csv import DictReader
 
 from django.core.management import BaseCommand
 
-from wireguard.models import AllowedIp, Dns
+from backend.wireguard.models import AllowedIp, Dns
 
 
 class Command(BaseCommand):
