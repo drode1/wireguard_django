@@ -3,8 +3,8 @@ from django.core.validators import (FileExtensionValidator,
                                     validate_ipv4_address)
 from django.db import models
 
-from backend.core.models import BaseModel, WireguardBaseModel
-from backend.users.models import User
+from core.models import BaseModel, WireguardBaseModel
+from users.models import User
 
 
 class GeneralSettings(BaseModel):

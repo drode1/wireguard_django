@@ -2,11 +2,11 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from backend.api.mixins import BaseGetApiView
-from backend.wireguard.models import AllowedIp, Dns, WireguardPeer
-from backend.wireguard.serializers import (ReadAllowedIpSerializer,
-                                           ReadConfigsSerializer,
-                                           ReadDnsSerializer)
+from api.mixins import BaseGetApiView
+from wireguard.models import AllowedIp, Dns, WireguardPeer
+from wireguard.serializers import (ReadAllowedIpSerializer,
+                                   ReadConfigsSerializer,
+                                   ReadDnsSerializer)
 
 
 class DnsApiView(BaseGetApiView):

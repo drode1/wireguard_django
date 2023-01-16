@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.wireguard.models import AllowedIp, Dns, WireguardInterface, \
+from wireguard.models import AllowedIp, Dns, WireguardInterface, \
     WireguardPeer
 
 
