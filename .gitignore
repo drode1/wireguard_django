@@ -247,7 +247,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+infrastructure/.env
 env/
 venv/
 ENV/
@@ -279,3 +279,4 @@ dmypy.json
 cython_debug/
 
 backend/media/
+static/
