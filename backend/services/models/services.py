@@ -1,26 +1,23 @@
 from services.utils.ip_generator import generate_random_ip
-from wireguard.models import WireguardPeer
+from wireguard.models import WireguardPeer, WireguardInterface, Dns, AllowedIp
 
 
-def get_base_allowed_ip() -> object | None:
+def get_base_allowed_ip() -> AllowedIp | None:
     """ Функция возвращает адрес, при котором wireguard работает всегда. """
 
-    from wireguard.models import AllowedIp
     return AllowedIp.objects.get(ip_address__exact='0.0.0.0')
 
 
-def get_all_dns() -> object | None:
+def get_all_dns() -> Dns | None:
     """ Функция возвращает список всех DNS адресов. """
 
-    from wireguard.models import Dns
     return Dns.objects.all()
 
 
-def get_first_wg_interface() -> object | None:
-    """ Функция возвращает первый из списка WG интерфейс. """
+def get_first_active_wg_interface() -> WireguardInterface | None:
+    """ Функция возвращает первый активный из списка WG интерфейс. """
 
-    from wireguard.models import WireguardInterface
-    return WireguardInterface.objects.first()
+    return WireguardInterface.objects.filter(is_active=True).first()
 
 
 def get_empty_peer_ip_address() -> str:

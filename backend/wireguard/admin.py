@@ -8,7 +8,7 @@ from django_object_actions import DjangoObjectActions, action
 
 from services.models.services import (get_base_allowed_ip,
                                       get_empty_peer_ip_address,
-                                      get_first_wg_interface)
+                                      get_first_active_wg_interface)
 from services.utils.config_genetrator import (
     generate_interface_config_with_data, generate_peer_config_with_data)
 from services.utils.keygen_generator import keygen
@@ -213,7 +213,7 @@ class WireguardPeerAdmin(DjangoObjectActions, admin.ModelAdmin):
                                                     private_key=private_key,
                                                     ip_address=ip_address,
                                                     )
-            new_peer.wireguard_interfaces.add(get_first_wg_interface())
+            new_peer.wireguard_interfaces.add(get_first_active_wg_interface())
             new_peer.allowed_ips.add(get_base_allowed_ip())
             for dns in Dns.objects.all():
                 new_peer.dns_addresses.add(dns.id)
