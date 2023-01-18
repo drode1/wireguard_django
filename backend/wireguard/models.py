@@ -40,9 +40,6 @@ class GeneralSettings(BaseModel):
             return self.domain_name
         return self.endpoint
 
-    def __repr__(self):
-        return f'Общие настройки - {self.id}'
-
 
 class AllowedIp(BaseModel):
     """
@@ -60,9 +57,6 @@ class AllowedIp(BaseModel):
 
     def __str__(self):
         return self.ip_address
-
-    def __repr__(self):
-        return f'Адрес {self.ip_address}'
 
 
 class Dns(BaseModel):
@@ -85,9 +79,6 @@ class Dns(BaseModel):
 
     def __str__(self):
         return self.dns_address
-
-    def __repr__(self):
-        return f'Адрес {self.name if self.name else self.dns_address}'
 
 
 class WireguardInterface(WireguardBaseModel):
@@ -125,11 +116,6 @@ class WireguardInterface(WireguardBaseModel):
 
     def __str__(self):
         return self.name
-
-    def __repr__(self):
-        return (
-            f'Интерфейс wireguard - {self.name} '
-            f'{self.ip_address}/{self.ip_address_node}')
 
 
 class WireguardPeer(WireguardBaseModel):
@@ -172,6 +158,3 @@ class WireguardPeer(WireguardBaseModel):
 
     def __str__(self):
         return f'{self.ip_address}/{self.ip_address_node}'
-
-    def __repr__(self):
-        return f'Пир - {self.id}'
