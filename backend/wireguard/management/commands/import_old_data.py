@@ -8,7 +8,7 @@ from services.decorators.decorators import print_import_file_info
 from services.models.services import (get_all_dns, get_base_allowed_ip,
                                       get_first_active_wg_interface)
 from users.models import User
-from wireguard.models import WireguardPeer
+from wireguard.models import GeneralSettings, WireguardInterface, WireguardPeer
 
 
 class Command(BaseCommand):
@@ -16,7 +16,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def _get_or_create_user(username: str | int,
-                            telegram_id: int = None) -> tuple[User, bool]:
+                            telegram_id: int | None) -> tuple[User, bool]:
         return User.objects.get_or_create(username=username,
                                           telegram_id=telegram_id)
 
@@ -58,29 +58,55 @@ class Command(BaseCommand):
             public_key=public_key, private_key=private_key,
             config_owner=config_owner, ip_address=ip_address)
 
-    @print_import_file_info
-    def import_data(self) -> None:
-        """ Импорт базовых данных в БД при развёртывании проекта. """
-        file_path = os.path.join(st.BASE_DIR, 'static/archive/old_wg_data.csv')
+    @staticmethod
+    def _import_server_data():
+        """ Функция загружает данные по серверу. """
+
+        file_path = os.path.join(st.BASE_DIR, f'static/archive/server.csv')
         with open(file_path, encoding='utf-8', mode='r') as f:
             for row in DictReader(f):
-                telegram_id = row.get('telegram_id')
+                GeneralSettings.objects.get_or_create(**row)
+
+    @staticmethod
+    def _import_interface_data():
+        """ Функция загружает данные по интерфейсу. """
+
+        file_path = os.path.join(st.BASE_DIR, f'static/archive/interface.csv')
+        with open(file_path, encoding='utf-8', mode='r') as f:
+            for row in DictReader(f):
+                WireguardInterface.objects.get_or_create(**row)
+
+    def _import_peer_data(self) -> None:
+        """ Функция загружает данные по пирам. """
+
+        file_path = os.path.join(st.BASE_DIR, f'static/archive/peers.csv')
+        with open(file_path, encoding='utf-8', mode='r') as f:
+            for row in DictReader(f):
+                telegram_id = (row.get('telegram_id') if row.get(
+                    'telegram_id') != '' else None)
                 username = row.get('username')
                 private_key = row.get('private_key')
                 public_key = row.get('public_key')
                 ip_address = f'10.0.0.{row.get("id")}'
-                try:
-                    user = self._get_or_create_user(username, telegram_id)
-                except ValueError:
-                    user = self._get_or_create_user(username)
+                user = self._get_or_create_user(username, telegram_id)
                 peer = self._get_or_create_peer(public_key, private_key,
                                                 user[0], ip_address)
                 self._link_wg_interface(peer[0])
                 self._link_all_dns(peer[0])
                 self._link_allowed_ip(peer[0])
 
+    @print_import_file_info
+    def import_data(self) -> None:
+        """ Импорт базовых данных в БД при развёртывании проекта. """
+
+        self._import_server_data()
+        self._import_interface_data()
+        self._import_peer_data()
+
     def handle(self, *args, **options):
-        """ Агрегирующий метод, который вызывается с помощью команды import
-        и добавляет тестовые данные в БД. """
+        """
+        Агрегирующий метод, который вызывается с помощью команды
+        import_old_data и добавляет тестовые данные в БД.
+        """
 
         self.import_data()
