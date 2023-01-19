@@ -13,6 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'test-key')
 DEBUG = os.getenv('DEBUG', False)
 
 ALLOWED_HOSTS = str(os.getenv('ALLOWED_HOSTS', '*')).split()
+CSRF_TRUSTED_ORIGINS = str(os.getenv('CSRF_TRUSTED_ORIGINS', '')).split()
 
 WIREGUARD_DIR = os.getenv('WIREGUARD_DIR', '')
 
