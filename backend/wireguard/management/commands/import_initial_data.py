@@ -1,5 +1,7 @@
+import os.path
 from csv import DictReader
 
+from django.conf import settings as st
 from django.core.management import BaseCommand
 
 from wireguard.models import AllowedIp, Dns
@@ -21,7 +23,9 @@ class Command(BaseCommand):
 
         for data in self.models:
             for model, file in data:
-                with open(f'static/data/{file}.csv', encoding='utf-8') as f:
+                file_path = os.path.join(st.BASE_DIR,
+                                         f'static/data/{file}.csv')
+                with open(file_path, encoding='utf-8') as f:
                     print(f'Начался импорт данных - {file}')
                     for row in DictReader(f):
                         model.objects.get_or_create(**row)
