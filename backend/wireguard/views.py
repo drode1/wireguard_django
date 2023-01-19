@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from api.mixins import BaseGetApiView
 from wireguard.models import AllowedIp, Dns, WireguardPeer
 from wireguard.serializers import (ReadAllowedIpSerializer,
-                                   ReadConfigsSerializer,
-                                   ReadDnsSerializer)
+                                   ReadConfigsSerializer, ReadDnsSerializer)
 
 
 class DnsApiView(BaseGetApiView):

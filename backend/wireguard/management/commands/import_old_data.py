@@ -5,7 +5,7 @@ from django.conf import settings as st
 from django.core.management import BaseCommand
 
 from services.decorators.decorators import print_import_file_info
-from services.models.services import (get_base_allowed_ip, get_all_dns,
+from services.models.services import (get_all_dns, get_base_allowed_ip,
                                       get_first_active_wg_interface)
 from users.models import User
 from wireguard.models import WireguardPeer

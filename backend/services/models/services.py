@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 
 from services.utils.ip_generator import generate_random_ip
-from wireguard.models import WireguardPeer, WireguardInterface, Dns, AllowedIp
+from wireguard.models import AllowedIp, Dns, WireguardInterface, WireguardPeer
 
 
 def get_base_allowed_ip() -> AllowedIp | None:
