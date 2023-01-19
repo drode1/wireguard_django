@@ -8,7 +8,7 @@ def get_base_allowed_ip() -> AllowedIp | None:
     return AllowedIp.objects.get(ip_address__exact='0.0.0.0')
 
 
-def get_all_dns() -> Dns | None:
+def get_all_dns() -> Dns.objects | None:
     """ Функция возвращает список всех DNS адресов. """
 
     return Dns.objects.all()

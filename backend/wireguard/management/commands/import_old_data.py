@@ -1,5 +1,7 @@
+import os
 from csv import DictReader
 
+from django.conf import settings as st
 from django.core.management import BaseCommand
 
 from services.decorators.decorators import print_import_file_info
@@ -59,8 +61,7 @@ class Command(BaseCommand):
     @print_import_file_info
     def import_data(self) -> None:
         """ Импорт базовых данных в БД при развёртывании проекта. """
-        file_path = 'backend/static/archive/old_wg_data.csv'
-
+        file_path = os.path.join(st.BASE_DIR, 'static/archive/old_wg_data.csv')
         with open(file_path, encoding='utf-8', mode='r') as f:
             for row in DictReader(f):
                 telegram_id = row.get('telegram_id')
