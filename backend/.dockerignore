@@ -1,2 +1,4 @@
-media/
-static/archive
+media/*
+static/archive*
+db.sqlite3
+__pycache__/
