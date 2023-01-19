@@ -40,7 +40,7 @@ class AuthTelegramUser(CreateAPIView, RetrieveAPIView):
         return Response(request.data, status=status.HTTP_201_CREATED)
 
     def get(self, request, *args, **kwargs) -> Response:
-        telegram_id = request.data.get('telegram_id')
+        telegram_id = self.request.query_params.get('telegram_id')
         if telegram_id:
             user = get_object_or_404(User, telegram_id=telegram_id)
             token = AccessToken.for_user(user)
