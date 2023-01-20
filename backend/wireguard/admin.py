@@ -5,13 +5,13 @@ from django.core.files.storage import default_storage
 from django.db.models import QuerySet
 from django.utils.html import format_html
 from django_object_actions import DjangoObjectActions, action
-
 from services.models.services import (get_base_allowed_ip,
                                       get_empty_peer_ip_address,
                                       get_first_active_wg_interface)
 from services.utils.config_genetrator import (
     generate_interface_config_with_data, generate_peer_config_with_data)
 from services.utils.keygen_generator import keygen
+
 from wireguard.models import (AllowedIp, Dns, GeneralSettings,
                               WireguardInterface, WireguardPeer)
 
