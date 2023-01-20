@@ -1,4 +1,4 @@
-from rest_framework import status, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -42,7 +42,8 @@ class PeerViewSet(viewsets.ReadOnlyModelViewSet):
         peer.save()
         return peer
 
-    @action(detail=False, methods=('GET',), url_path='get-config')
+    @action(detail=False, methods=('GET',), url_path='get-config',
+            permission_classes=(permissions.IsAuthenticated,))
     def get_config(self, request, *args, **kwargs):
         """
         Метод возвращает пир (конфиг), который не принадлежит

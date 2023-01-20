@@ -1,6 +1,6 @@
 from django.db.models import QuerySet
-
 from services.utils.ip_generator import generate_random_ip
+
 from wireguard.models import AllowedIp, Dns, WireguardInterface, WireguardPeer
 
 

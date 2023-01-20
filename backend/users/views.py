@@ -45,5 +45,5 @@ class AuthTelegramUser(CreateAPIView, RetrieveAPIView):
             user = get_object_or_404(User, telegram_id=telegram_id)
             token = AccessToken.for_user(user)
             return Response({'access': str(token)})
-        return Response({'error': 'В теле запроса отсутствует telegram_id'},
+        return Response({'error': 'В запросе отсутствует telegram_id'},
                         status=status.HTTP_400_BAD_REQUEST)
