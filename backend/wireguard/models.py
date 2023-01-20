@@ -49,6 +49,8 @@ class AllowedIp(BaseModel):
 
     ip_address = models.GenericIPAddressField('Адрес', blank=False, null=False,
                                               unique=True)
+    ip_address_node = models.PositiveSmallIntegerField('IP узел', blank=True,
+                                                       null=True)
 
     class Meta:
         verbose_name = 'Разрешенный адрес'
@@ -56,7 +58,7 @@ class AllowedIp(BaseModel):
         ordering = ('is_active', '-id')
 
     def __str__(self):
-        return self.ip_address
+        return f'{self.ip_address}/{self.ip_address_node}'
 
 
 class Dns(BaseModel):

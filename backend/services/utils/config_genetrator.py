@@ -87,7 +87,7 @@ def generate_peer_config_with_data(obj) -> str:
     server_public_key = wg_interface.public_key
     endpoint = f'{wg_interface.server}:{wg_interface.listen_port}'
     allowed_ips = ','.join(
-        map(str, [ip.__str__() for ip in obj.allowed_ips.all()]))
+        map(str, [ip for ip in obj.allowed_ips.all()]))
     persistent_keep_alive = obj.persistent_keep_alive
 
     return generate_peer_config_structure(private_key, address, dns,

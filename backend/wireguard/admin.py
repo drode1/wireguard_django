@@ -28,9 +28,9 @@ class SettingsAdmin(admin.ModelAdmin):
 class AllowedIpAdmin(admin.ModelAdmin):
     """ Управление список разрешенных IP для взаимодействия с WG. """
 
-    list_display = ('id', 'ip_address', 'is_active')
+    list_display = ('id', 'ip_address', 'ip_address_node', 'is_active')
     list_filter = ('is_active',)
-    list_editable = ('ip_address',)
+    list_editable = ('ip_address', 'ip_address_node')
 
 
 @admin.register(Dns)
