@@ -53,7 +53,6 @@ class PeerViewSet(viewsets.ReadOnlyModelViewSet):
         user = request.user
         if self.__check_user_peer_exist(user):
             user_peer = user.peers.order_by('id').first()
-
             content = {
                 'error': 'У вас уже есть конфиг файл',
                 'data': {
@@ -61,7 +60,7 @@ class PeerViewSet(viewsets.ReadOnlyModelViewSet):
                     'config': user_peer.config_file
                 }
             }
-            return Response(content, status=status.HTTP_403_FORBIDDEN)
+            return Response(content, status=status.HTTP_200_OK)
         peer_without_owner = (
             WireguardPeer.objects.filter(config_owner__isnull=True)
             .order_by('id').first())
@@ -73,5 +72,4 @@ class PeerViewSet(viewsets.ReadOnlyModelViewSet):
                     'config': peer.config_file
                 }
         }
-
         return Response(content, status=status.HTTP_201_CREATED)
