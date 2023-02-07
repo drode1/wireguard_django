@@ -26,13 +26,8 @@ class AuthTelegramUser(CreateAPIView, RetrieveAPIView):
 
     permission_classes = (permissions.AllowAny,)
 
-    def get_serializer_class(self) -> type[UserTelegramSerializer] | None:
-        if self.request.method == 'POST':
-            return UserTelegramSerializer
-        return None
-
     def post(self, request, *args, **kwargs) -> Response:
-        serializer = self.get_serializer(data=request.data)
+        serializer = UserTelegramSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         password = make_password(str(request.data.get('telegram_id')))
         User.objects.get_or_create(**serializer.validated_data,
