@@ -14,8 +14,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     permission_classes = (permissions.IsAdminUser,)
 
-    def get_serializer_class(self) -> type[
-        CreateUserSerializer | UserSerializer]:
+    def get_serializer_class(self) -> type:
         if self.request.method == 'POST':
             return CreateUserSerializer
         return UserSerializer

@@ -44,7 +44,7 @@ class Command(BaseCommand):
     def _link_allowed_ip(peer: WireguardPeer) -> None:
         allowed_ip = get_base_allowed_ip()
         if allowed_ip is None:
-            raise ValueError(f'Отсутствует разрешенный адрес')
+            raise ValueError('Отсутствует разрешенный адрес')
 
         allowed_ip.save()
         allowed_ip.allowed_ip_set.add(peer)
@@ -52,26 +52,26 @@ class Command(BaseCommand):
 
     @staticmethod
     def _get_or_create_peer(public_key: str, private_key: str,
-                            config_owner: User, ip_address: str) -> tuple[
-        WireguardPeer, bool]:
+                            config_owner: User, ip_address: str) -> (
+            WireguardPeer, bool):
         return WireguardPeer.objects.get_or_create(
             public_key=public_key, private_key=private_key,
             config_owner=config_owner, ip_address=ip_address)
 
     @staticmethod
-    def _import_server_data():
+    def _import_server_data() -> None:
         """ Функция загружает данные по серверу. """
 
-        file_path = os.path.join(st.BASE_DIR, f'static/archive/server.csv')
+        file_path = os.path.join(st.BASE_DIR, 'static/archive/server.csv')
         with open(file_path, encoding='utf-8', mode='r') as f:
             for row in DictReader(f):
                 GeneralSettings.objects.get_or_create(**row)
 
     @staticmethod
-    def _import_interface_data():
+    def _import_interface_data() -> None:
         """ Функция загружает данные по интерфейсу. """
 
-        file_path = os.path.join(st.BASE_DIR, f'static/archive/interface.csv')
+        file_path = os.path.join(st.BASE_DIR, 'static/archive/interface.csv')
         with open(file_path, encoding='utf-8', mode='r') as f:
             for row in DictReader(f):
                 WireguardInterface.objects.get_or_create(**row)
@@ -79,7 +79,7 @@ class Command(BaseCommand):
     def _import_peer_data(self) -> None:
         """ Функция загружает данные по пирам. """
 
-        file_path = os.path.join(st.BASE_DIR, f'static/archive/peers.csv')
+        file_path = os.path.join(st.BASE_DIR, 'static/archive/peers.csv')
         with open(file_path, encoding='utf-8', mode='r') as f:
             for row in DictReader(f):
                 telegram_id = (row.get('telegram_id') if row.get(
