@@ -6,6 +6,7 @@ services:
     restart: always
     volumes:
       - media_value:/app/media/
+      - ./data/db.sqlite3:/app/db.sqlite3
     env_file:
       - ./.env
     container_name: wireguard-django-app
