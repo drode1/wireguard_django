@@ -278,5 +278,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-backend/media/
+backend/media/configs/*
+backend/media/interfaces/*
 static/
