@@ -28,10 +28,14 @@ class AuthTelegramUser(CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = UserTelegramSerializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
-        telegram_id: int = request.data.get('telegram_id')
-        User.objects.get_or_create(**serializer.validated_data)
-        response = self._get_user_token(telegram_id)
-        return response
+        telegram_id: int = serializer.validated_data.get('telegram_id')
+        try:
+            User.objects.get(telegram_id=telegram_id)
+        except User.DoesNotExist:
+            User.objects.create(**serializer.validated_data)
+        else:
+            response = self._get_user_token(telegram_id)
+            return response
 
     @staticmethod
     def _get_user_token(telegram_id: User.telegram_id):

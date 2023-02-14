@@ -38,14 +38,12 @@ class UserSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class UserTelegramSerializer(serializers.ModelSerializer):
+class UserTelegramSerializer(serializers.Serializer):
     """
     Сериализатор для создания пользователя через Telegram.
     """
     telegram_id = serializers.IntegerField(min_value=1, required=True)
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
     username = serializers.CharField(validators=[UnicodeUsernameValidator],
                                      required=True)
-
-    class Meta:
-        model = User
-        fields = ('telegram_id', 'first_name', 'last_name', 'username',)
