@@ -2,3 +2,4 @@ media/*
 static/archive*
 db.sqlite3
 __pycache__/
+*.log
