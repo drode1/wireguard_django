@@ -1,7 +1,6 @@
-from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status, viewsets
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework import permissions, viewsets, status
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 
@@ -20,24 +19,22 @@ class UserViewSet(viewsets.ModelViewSet):
         return UserSerializer
 
 
-class AuthTelegramUser(CreateAPIView, RetrieveAPIView):
+class AuthTelegramUser(CreateAPIView):
     """ Метод для регистрации и авторизации через Telegram. """
 
     permission_classes = (permissions.AllowAny,)
+    serializer_class = UserTelegramSerializer
 
-    def post(self, request, *args, **kwargs) -> Response:
-        serializer = UserTelegramSerializer(data=request.data)
+    def post(self, request, *args, **kwargs):
+        serializer = UserTelegramSerializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
-        password = make_password(str(request.data.get('telegram_id')))
-        User.objects.get_or_create(**serializer.validated_data,
-                                   password=password)
-        return Response(request.data, status=status.HTTP_201_CREATED)
+        telegram_id: int = request.data.get('telegram_id')
+        User.objects.get_or_create(**serializer.validated_data)
+        response = self._get_user_token(telegram_id)
+        return response
 
-    def get(self, request, *args, **kwargs) -> Response:
-        telegram_id = self.request.query_params.get('telegram_id')
-        if telegram_id:
-            user = get_object_or_404(User, telegram_id=telegram_id)
-            token = AccessToken.for_user(user)
-            return Response({'access': str(token)})
-        return Response({'error': 'В запросе отсутствует telegram_id'},
-                        status=status.HTTP_400_BAD_REQUEST)
+    @staticmethod
+    def _get_user_token(telegram_id: User.telegram_id):
+        user = get_object_or_404(User, telegram_id=telegram_id)
+        token = AccessToken.for_user(user)
+        return Response({'access': str(token)}, status=status.HTTP_201_CREATED)

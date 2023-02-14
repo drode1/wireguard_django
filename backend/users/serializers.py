@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from rest_framework import serializers
 
 from users.models import User
@@ -41,6 +42,9 @@ class UserTelegramSerializer(serializers.ModelSerializer):
     """
     Сериализатор для создания пользователя через Telegram.
     """
+    telegram_id = serializers.IntegerField(min_value=1, required=True)
+    username = serializers.CharField(validators=[UnicodeUsernameValidator],
+                                     required=True)
 
     class Meta:
         model = User

@@ -2,6 +2,8 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from django.urls import reverse_lazy
+from django.utils.datetime_safe import datetime
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -114,6 +116,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
+
+LOGIN_URL = reverse_lazy('admin:login')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
