@@ -5,8 +5,9 @@ services:
     image: drode1/wireguard_django:latest-amd64
     restart: always
     volumes:
-      - media_value:/app/media/
+      - ./media/:/app/media/
       - ./data/db.sqlite3:/app/db.sqlite3
+      - ./logs:/app/logs
     env_file:
       - ./.env
     container_name: wireguard-django-app
@@ -18,7 +19,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./static/:/var/html/static/
-      - media_value:/var/html/media/
+      - ./media/:/var/html/media/
     depends_on:
       - backend
     container_name: wireguard-django-nginx
