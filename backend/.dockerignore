@@ -1,4 +1,5 @@
-media/*
+media/configs/*
+media/interfaces/*
 static/archive*
 db.sqlite3
 __pycache__/
